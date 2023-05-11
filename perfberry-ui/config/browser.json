@@ -1,0 +1,8 @@
+{
+	"title": "Perfberry",
+	"logger": {
+		"level": 60
+	},
+	"apiEndpoint": "http://localhost:9000",
+	"dateTimeFormat": "MMM D, YYYY HH:mm"
+}

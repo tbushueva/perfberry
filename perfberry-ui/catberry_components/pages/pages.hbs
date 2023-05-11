@@ -1,0 +1,21 @@
+<div class="ui {{#if fullscreenEnabled}}basic segment{{else}}container{{/if}}">
+	{{#if isActive.home}}
+		<cat-home></cat-home>
+	{{/if}}
+
+	{{#if isActive.projects}}
+		<cat-projects cat-store="Projects"></cat-projects>
+	{{/if}}
+
+	{{#if isActive.info}}
+		<cat-info cat-store="Info"></cat-info>
+	{{/if}}
+
+	{{#if isActive.project}}
+		<cat-project cat-store="Project"></cat-project>
+	{{/if}}
+
+	{{#if isActive.report}}
+		<cat-report cat-store="Report"></cat-report>
+	{{/if}}
+</div>

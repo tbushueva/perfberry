@@ -1,0 +1,128 @@
+<form class="ui form" id="filters">
+    <h3 class="ui header">Filters <small><a href="">reset</a></small></h3>
+    <div class="inline fields">
+        <label>Group</label>
+        <div class="field">
+            <div class="ui inline dropdown">
+                <input name="group" type="hidden" value="{{filters.active.group}}">
+                <div class="text">{{filters.active.group}}</div>
+                <i class="angle down icon"></i>
+                <div class="menu">
+                    <div class="ui icon search input">
+                        <i class="search icon"></i>
+                        <input placeholder="Search groups...">
+                    </div>
+                    <div class="divider"></div>
+                    {{#each builds.0.transactions.filters.groups}}
+                        <div class="item" data-value="{{this}}">{{this}}</div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="inline fields">
+		<div class="four wide field">
+			<label>Query</label>
+			<input name="query" value="{{filters.query}}">
+		</div>
+	</div>
+	<div class="inline fields">
+		<label>Status</label>
+		{{#each filters.status}}
+			<div class="field">
+				<div class="ui radio checkbox">
+					<input class="hidden" name="status" value="{{status}}" type="radio" {{#if active}}checked{{/if}}>
+					<label>{{status}}</label>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+	<div class="inline fields">
+		<label>Code</label>
+		{{#each filters.code}}
+			<div class="field">
+				<div class="ui radio checkbox">
+					<input class="hidden" name="code" value="{{code}}" type="radio" {{#if active}}checked{{/if}}>
+					<label>{{code}}</label>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+	<div class="inline fields">
+		<label>Top size</label>
+		{{#each filters.limit}}
+			<div class="field">
+				<div class="ui radio checkbox">
+					<input class="hidden" name="limit" value="{{size}}" type="radio" {{#if active}}checked{{/if}}>
+					<label>{{size}}</label>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+</form>
+<br>
+
+{{#each builds}}
+	<cat-build-card cat-store="Report" path="report.builds.{{@index}}"></cat-build-card>
+
+	<div class="ui vertical segment">
+
+        {{#if transactions.items}}
+            <table class="ui very basic fixed single line sorter small table">
+                <thead>
+                <tr style="background-color: #fff;">
+                    <th class="one wide">Status</th>
+                    <th class="one wide">Code</th>
+                    <th class="three wide">Time</th>
+                    <th class="three wide">Group</th>
+                    <th>Query</th>
+                    {{#each _metricHeaders}}
+                    <th class="one wide right aligned" title="{{title}}">
+                        {{header}}<br>{{unit}}
+                    </th>
+                    {{/each}}
+                </tr>
+                </thead>
+                <tbody style="vertical-align: text-top">
+                {{#each transactions.items}}
+                    <tr>
+                        <td>
+                            <span class="ui {{#if _statusSuccessful}}green{{else}}red{{/if}} basic label">
+                                {{status}}
+                            </span>
+                        </td>
+                        <td>{{code}}</td>
+                        <td>{{_datetime}}</td>
+                        <td title="{{group}}">{{group}}</td>
+                        <td>
+                            <a href="{{query}}" target="_blank">{{queryLabel}}</a>
+                            {{#if error}}
+                                {{#if query}}<br>{{/if}}Error: {{error}}
+                            {{/if}}
+							{{#if payload}}
+								<div class="ui accordion">
+									<div class="title">
+										Payload<i class="angle down icon"></i>
+									</div>
+									<div class="content" style="overflow-x: auto">
+										<pre>{{payload}}</pre>
+									</div>
+								</div>
+							{{/if}}
+                        </td>
+                        {{#each metrics}}
+                            <td class="right aligned">
+                                {{_parts.integer}}<span style="font-size: 0.6em">.{{_parts.fraction}}</span>
+                            </td>
+                        {{/each}}
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <span class="ui disabled text">Showing {{_transactionsTotal}} transactions</span>
+        {{else}}
+            <p>No transactions.</p>
+        {{/if}}
+    </div>
+	<br>
+{{/each}}

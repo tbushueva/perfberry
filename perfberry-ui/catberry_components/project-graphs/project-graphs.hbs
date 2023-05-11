@@ -1,0 +1,79 @@
+<div class="ui accordion">
+    <div class="title">
+        <h2 class="ui header">
+            {{title}}<i class="angle down icon"></i>
+        </h2>
+    </div>
+    <div class="content">
+        <div class="ui three column grid">
+            <div class="row">
+                <div class="column">
+                    <h3 class="ui header">Quick ranges</h3>
+                    <div class="ui two column grid">
+                        {{#each ranges.quick}}
+                        <div class="column">
+                            <div class="ui vertical text menu">
+                                {{#each .}}
+                                    <a class="{{#if isActive}}active{{/if}} item" data-from="{{from}}" data-to="{{to}}" name="change-range">
+                                        {{label}}
+                                    </a>
+                                {{/each}}
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="column">
+                    <h3 class="ui header">Custom range</h3>
+                    <div class="ui form">
+                        <div class="field">
+                            <label>From</label>
+                            <div class="ui calendar" id="rangestart">
+                                <div class="ui input left icon">
+                                    <i class="calendar icon"></i>
+                                    <input placeholder="Start">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>To</label>
+                            <div class="ui calendar" id="rangeend">
+                                <div class="ui input left icon">
+                                    <i class="calendar icon"></i>
+                                    <input placeholder="End">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3 class="ui header">Refresh every</h3>
+                    <div class="ui vertical text menu">
+                        {{#each ranges.durations}}
+                        <a class="{{#if isActive}}active{{/if}} item" data-duration="{{value}}" name="change-refresh">
+                            {{label}}
+                        </a>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#each graphs}}
+    <cat-history-graph cat-store="ProjectGraphs" index="{{@index}}"></cat-history-graph><br>
+{{/each}}
+
+{{#if showButtons}}
+    <div class="ui center aligned vertical segment">
+        {{#if showSaveGraphsButton}}
+            <button class="ui primary button" name="save">
+                Save graph{{#if isMultiMode}}s{{/if}}
+            </button>
+        {{/if}}
+        {{#if isMultiMode}}
+            <button class="ui button" name="add-graph">Add graph</button>
+        {{/if}}
+    </div>
+{{/if}}

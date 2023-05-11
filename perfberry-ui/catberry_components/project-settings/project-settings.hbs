@@ -1,0 +1,28 @@
+<div class="ui grid">
+	<div class="two wide column">
+		<div class="ui fluid vertical secondary pointing menu">
+			{{#each tabs}}
+				<a class="{{#if active}}active{{/if}} item" href="{{link}}">
+					{{name}}
+				</a>
+			{{/each}}
+		</div>
+	</div>
+	<div class="fourteen wide column">
+		{{#if tabs.general.active}}
+			<cat-project-settings-general cat-store="ProjectSettingsGeneral"></cat-project-settings-general>
+		{{/if}}
+		{{#if tabs.searches.active}}
+			<cat-project-settings-searches cat-store="ProjectSettingsSearches"></cat-project-settings-searches>
+		{{/if}}
+		{{#if tabs.apdex.active}}
+			<cat-project-settings-apdex cat-store="ProjectSettingsApdex"></cat-project-settings-apdex>
+		{{/if}}
+		{{#if tabs.assertions.active}}
+			<cat-project-settings-assertions cat-store="ProjectSettingsAssertions"></cat-project-settings-assertions>
+		{{/if}}
+		{{#if tabs.badges.active}}
+			<cat-project-settings-badges cat-store="ProjectSettingsBadges"></cat-project-settings-badges>
+		{{/if}}
+	</div>
+</div>

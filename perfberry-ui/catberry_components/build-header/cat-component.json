@@ -1,0 +1,5 @@
+{
+	"template": "./build-header.hbs",
+	"errorTemplate": "./error.hbs",
+	"logic": "./BuildHeader.js"
+}

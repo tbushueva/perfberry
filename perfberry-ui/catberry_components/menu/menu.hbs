@@ -1,0 +1,30 @@
+{{#unless fullscreenEnabled}}
+	<div class="ui attached stackable inverted borderless menu" style="background-image: url(/bg.jpg);">
+		<a class="header item" href="/">
+			Perfberry
+		</a>
+		{{#each menu.left}}
+			<a class="{{#if isActive}}active{{/if}} item" href="{{link}}">
+				{{section}}
+			</a>
+			{{#each breadcrumb}}
+				<a class="{{#if isActive}}active{{/if}} item" href="{{link}}">
+					<i class="angle right icon"></i>{{section}}
+				</a>
+			{{/each}}
+		{{/each}}
+		<div class="right menu">
+			{{#each menu.right}}
+				<a class="{{#if isActive}}active{{/if}} item" href="{{link}}">
+					{{section}}
+				</a>
+				{{#each breadcrumb}}
+					<a class="{{#if isActive}}active{{/if}} item" href="{{link}}">
+						<i class="angle right icon"></i>{{section}}
+					</a>
+				{{/each}}
+			{{/each}}
+		</div>
+	</div>
+	<div class="ui hidden divider"></div>
+{{/unless}}

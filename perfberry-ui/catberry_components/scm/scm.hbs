@@ -1,0 +1,17 @@
+<cat-scm-vcs cat-store="Report" path="{{_parentPath}}"></cat-scm-vcs>
+
+{{#if hasParameters}}
+	<h4 class="ui header">Parameters</h4>
+	<div class="ui horizontal divided list">
+		{{#each parameters}}
+			<div class="item">
+				<span class="ui disabled text">{{@key}}</span> {{this}}
+			</div>
+		{{/each}}
+	</div>
+{{else}}
+    <br>
+    <span class="ui disabled text">
+		<i class="lightbulb outline icon"></i>No parameters data. You may add custom labels about software configuration.
+	</span>
+{{/if}}

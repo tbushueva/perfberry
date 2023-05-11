@@ -1,0 +1,46 @@
+<form class="ui form" id="filters">
+    <h3 class="ui header">Filters <small><a href="">reset</a></small></h3>
+    <div class="inline fields">
+        <label>Group</label>
+        <div class="field">
+            <div class="ui inline dropdown">
+                <input name="group" type="hidden" value="{{builds.0.graphs.0.group}}">
+                <div class="text">{{builds.0.graphs.0.group}}</div>
+                <i class="angle down icon"></i>
+                <div class="menu">
+                    <div class="ui icon search input">
+                        <i class="search icon"></i>
+                        <input placeholder="Search groups...">
+                    </div>
+                    <div class="divider"></div>
+                    {{#each builds.0.graphs.0.data.filters.groups}}
+                        <div class="item" data-value="{{this}}">{{this}}</div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="inline fields">
+        <label>Status</label>
+        {{#each filters.status}}
+            <div class="field">
+                <div class="ui radio checkbox">
+                    <input class="hidden" name="status" value="{{code}}" type="radio" {{#if active}}checked{{/if}}>
+                    <label>{{label}}</label>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</form>
+<br>
+
+{{#each builds}}
+    <cat-build-card cat-store="Report" path="report.builds.{{@index}}"></cat-build-card>
+
+    <div class="ui vertical segment">
+        {{#each graphs}}
+            <cat-report-graph cat-store="ReportGraphs" build="{{../id}}" index="{{@index}}"></cat-report-graph><br>
+        {{/each}}
+    </div>
+	<br>
+{{/each}}

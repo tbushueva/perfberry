@@ -1,0 +1,9 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@headerColor: @lightTextColor;
+@headerFontWeight: normal;
+@headerVerticalAlign: top;
+
+@rowBorder: none;

@@ -1,0 +1,33 @@
+{{#unless fullscreenEnabled}}
+	<h1 class="ui header">Project {{project.name}}</h1>
+
+	<div class="ui secondary pointing menu">
+		<a class="{{#if tabs.overview.active}}active {{/if}}item" href="{{tabs.overview.link}}">
+			Overview
+		</a>
+		<a class="{{#if tabs.reports.active}}active {{/if}}item" href="{{tabs.reports.link}}">
+			Reports
+		</a>
+		<a class="{{#if tabs.graphs.active}}active {{/if}}item" href="{{tabs.graphs.link}}">
+			Graphs
+		</a>
+		<a class="{{#if tabs.settings.active}}active {{/if}}item" href="{{tabs.settings.link}}">
+			Settings
+		</a>
+	</div>
+{{/unless}}
+
+<div class="ui active centered inline loader"></div>
+
+{{#if tabs.overview.active}}
+	<cat-project-overview cat-store="ProjectOverview"></cat-project-overview>
+{{/if}}
+{{#if tabs.reports.active}}
+	<cat-project-reports cat-store="ProjectReports"></cat-project-reports>
+{{/if}}
+{{#if tabs.graphs.active}}
+	<cat-project-graphs cat-store="ProjectGraphs"></cat-project-graphs>
+{{/if}}
+{{#if tabs.settings.active}}
+	<cat-project-settings cat-store="ProjectSettings"></cat-project-settings>
+{{/if}}

@@ -1,0 +1,30 @@
+<h2 class="ui header">Edit report</h2>
+<form class="ui form" name="edit">
+    <div class="fields">
+        <input name="project[alias]" type="hidden" value="{{project.alias}}">
+        <input name="projectId" type="hidden" value="{{report.projectId}}">
+        <input name="reportId" type="hidden" value="{{report.id}}">
+        <input name="links:array" type="hidden" value="[]">
+        <div class="six wide field">
+            <label>Label</label>
+            <input name="label" type="text" value="{{report.label}}">
+        </div>
+    </div>
+
+    <div class="field">
+        <button class="ui primary button" type="submit">Save report</button>
+    </div>
+</form>
+
+<h2 class="ui header">Remove report</h2>
+<form class="ui form" name="delete">
+    <input name="project[alias]" type="hidden" value="{{project.alias}}">
+    <input name="projectId" type="hidden" value="{{report.projectId}}">
+    <input name="reportId" type="hidden" value="{{report.id}}">
+    <p>Removing the report will delete its report and all related resources including builds, statistics, transactions etc.</p>
+    <p><strong>Removed reports cannot be restored!</strong></p>
+
+    <div class="field">
+        <button class="ui red button" type="submit">Remove report</button>
+    </div>
+</form>

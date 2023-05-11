@@ -1,0 +1,11 @@
+{{#if vcs}}
+	<p>
+		<i class="ui code branch grey icon"></i>{{vcs.reference}}&nbsp;
+		<i class="ui long arrow alternate right grey icon"></i>{{vcs.shortRevision}}<br>
+		{{vcs.title}}
+	</p>
+{{else}}
+	<span class="ui disabled text">
+		<i class="lightbulb outline icon"></i>No VCS data. You may add branch and commit info.
+	</span>
+{{/if}}

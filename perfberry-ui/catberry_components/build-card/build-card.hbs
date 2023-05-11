@@ -1,0 +1,26 @@
+<div class="ui equal width divided grid">
+	<div class="row">
+		<div class="column">
+			<cat-build-header cat-store="Report" path="{{_parentPath}}"></cat-build-header>
+		</div>
+		{{#if comparable}}
+			<div class="column">
+				<cat-build-header cat-store="Report" path="comparedReport.builds.{{comparedBuildIndex}}"></cat-build-header>
+			</div>
+		{{/if}}
+	</div>
+</div>
+
+<h3 class="ui header">Software configuration management</h3>
+<div class="ui equal width divided grid">
+	<div class="row">
+		<div class="column">
+			<cat-scm cat-store="Report" path="{{_parentPath}}.scm"></cat-scm>
+		</div>
+		{{#if comparable}}
+			<div class="column">
+				<cat-scm cat-store="Report" path="comparedReport.builds.{{comparedBuildIndex}}.scm"></cat-scm>
+			</div>
+		{{/if}}
+	</div>
+</div>

@@ -1,0 +1,52 @@
+<cat-report-card cat-store="Report"></cat-report-card>
+
+{{#if tabs.showCompare}}
+	<h3 class="ui header">
+		{{#if comparedReport}}
+			Shows #{{report.id}} compared to #{{comparedReport.id}}
+		{{/if}}
+		<a class="ui primary button" href="{{compareLink}}">
+			Select {{#if comparedReport}}another{{/if}} report to compare
+		</a>
+		{{#if comparedReport}}
+			<a class="ui basic button" href="?">Clear</a>
+		{{/if}}
+	</h3>
+{{/if}}
+
+<div class="ui secondary pointing menu">
+    <a class="{{#if tabs.statistics.active}}active {{/if}}item" href="{{tabs.statistics.link}}">
+        Statistics
+    </a>
+    <a class="{{#if tabs.assertions.active}}active {{/if}}item" href="{{tabs.assertions.link}}">
+        Assertions
+    </a>
+    <a class="{{#if tabs.transactions.active}}active {{/if}}item" href="{{tabs.transactions.link}}">
+        Transactions
+    </a>
+    <a class="{{#if tabs.graphs.active}}active {{/if}}item" href="{{tabs.graphs.link}}">
+        Graphs
+    </a>
+    <a class="{{#if tabs.edit.active}}active {{/if}}item" href="{{tabs.edit.link}}">
+        Edit
+    </a>
+</div>
+<br>
+
+<div class="ui active centered inline loader"></div>
+
+{{#if tabs.statistics.active}}
+	<cat-report-statistics cat-store="ReportStatistics"></cat-report-statistics>
+{{/if}}
+{{#if tabs.assertions.active}}
+	<cat-report-assertions cat-store="ReportAssertions"></cat-report-assertions>
+{{/if}}
+{{#if tabs.transactions.active}}
+	<cat-report-transactions cat-store="ReportTransactions"></cat-report-transactions>
+{{/if}}
+{{#if tabs.graphs.active}}
+	<cat-report-graphs cat-store="ReportGraphs"></cat-report-graphs>
+{{/if}}
+{{#if tabs.edit.active}}
+	<cat-report-edit cat-store="ReportEdit"></cat-report-edit>
+{{/if}}

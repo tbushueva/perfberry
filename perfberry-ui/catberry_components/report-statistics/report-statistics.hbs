@@ -1,0 +1,208 @@
+{{#each builds}}
+	<cat-build-card cat-store="Report" path="report.builds.{{@index}}"></cat-build-card>
+
+	{{#if statistics.global.apdex}}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="six wide column">
+                    <h3 class="ui header">Apdex score</h3>
+                    <div class="ui {{statistics.global.apdex.color}} large statistic" style="margin-left: -5px;margin-top: -10px">
+                        <div class="value">
+                            {{#if statistics.global.apdex.isNoSamples}}
+                                NS<sub style="font-size: 0.33em">{{statistics.global.apdex.zones.t}}</sub>
+                            {{else}}
+                                {{statistics.global.apdex.value}}<sub style="font-size: 0.33em">{{statistics.global.apdex.zones.t}}</sub>{{#if statistics.global.apdex.isSmallGroup}}*{{/if}}
+                            {{/if}}
+                            <span class="postfix">
+                        <span class="{{#unless statistics.global.apdex.diff}}hidden{{/unless}} {{statistics.global.apdex.diff.properties.className}} opacity upper" style="opacity: {{statistics.global.apdex.diff.properties.opacity}}">
+                            {{#if statistics.global.apdex.diffAvailable}}
+                                <strong>{{statistics.global.apdex.diff.valueFmt}}</strong>
+                            {{else}}
+                                n/a
+                            {{/if}}
+                        </span>
+                        <span>{{_unit}}&nbsp;</span>
+                    </span>
+                        </div>
+                    </div>
+                    <div class="ui hidden divider"></div>
+                    <div class="ui hidden divider"></div>
+                    <h2 class="ui header">
+                        Performance is
+                        {{#if statistics.global.apdex.isNoSamples}}
+                            not detected.
+                        {{else}}
+                            {{statistics.global.apdex.rating}}.
+                        {{/if}}
+                    </h2>
+                </div>
+                <div class="five wide column">
+                    <h3 class="ui header">Summary</h3>
+                    <div class="ui list">
+                        <div class="item">
+                            Target metric is {{statistics.global.apdex.metricLabel}}
+                        </div>
+                        <div class="item">
+                            Satisfied zone is 0 to {{statistics.global.apdex.zones.t}} s
+                        </div>
+                        <div class="item">
+                            Tolerating zone is greater than {{statistics.global.apdex.zones.t}} s to {{statistics.global.apdex.zones.f}} s
+                        </div>
+                        <div class="item">
+                            Frustrated zone is greater than {{statistics.global.apdex.zones.f}} s
+                        </div>
+                        <div class="item">
+                            Total samples is {{statistics.global.apdex.samples}}
+                        </div>
+                    </div>
+                    <p>
+                        <a href="http://www.apdex.org">
+                            More about Apdex
+                        </a>
+                    </p>
+                </div>
+                <div class="five wide column">
+                    <h3 class="ui header">Ratings</h3>
+                    <table class="ui very basic very compact small table" data-name="apdex-ratings">
+                        <thead>
+                            <th>Range</th>
+                            <th>Rating</th>
+                        </thead>
+                        <tbody>
+                        {{#each ../apdexRatings}}
+                        <tr>
+                            <td>
+                                <span class="ui {{color}} text">
+                                    {{range.from}} to {{range.to}}
+                                </span>
+                            </td>
+                            <td>{{label}}</td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {{else}}
+        <br>
+        <span class="ui disabled text">
+			<i class="lightbulb outline icon"></i>No Apdex score. You may add rules in project settings.
+		</span>
+	{{/if}}
+    {{#if statistics.global.items}}
+		<h3 class="ui header">Global statistics</h3>
+		<div class="ui {{statistics.global._globalStatsCount}} tiny statistics">
+			{{#each statistics.global.items}}
+				<div class="statistic">
+					<div class="label" title="{{_title}}">
+						{{_label}}
+					</div>
+					<div class="value">
+						<a href="{{_historyLink}}" title="Go to metric's history">
+							{{_integer}}<span style="font-size: 0.4em">.{{_fraction}}</span>
+							<span class="postfix">
+								<span class="{{#unless diff}}hidden{{/unless}} {{_diffProperties.className}} opacity upper" style="opacity: {{_diffProperties.opacity}}">
+                                    {{#if diffAvailable}}
+                                        <strong>{{_diffInteger}}<span style="font-size: 0.6em">.{{_diffFraction}}</span></strong>
+                                    {{else}}
+                                        n/a
+                                    {{/if}}
+								</span>
+								<span>{{_unit}}&nbsp;</span>
+							</span>
+						</a>
+					</div>
+				</div>
+			{{/each}}
+		</div>
+	{{/if}}
+
+	{{#if statistics.groups}}
+		<h3 class="ui header">Groups statistics</h3>
+
+        <div>
+            <div class="ui input">
+                <input class="filterable" placeholder="Filter groups...">
+            </div>
+            <div class="ui right floated vertical segment">
+                <a href="" name="pager" data-direction="back">
+                    <i class="ui chevron left icon"></i>Back
+                </a>&nbsp;&nbsp;&nbsp;
+                <a href="" name="pager" data-direction="next">
+                    Next&nbsp;<i class="ui chevron right icon"></i>
+                </a>
+            </div>
+        </div>
+
+        <table class="ui very basic filterable fixed small table" data-name="group-statistics">
+            <thead>
+            <tr style="background-color: #fff;">
+                <th class="three wide">Group</th>
+                {{#if groupsHasApdex}}
+                    <th class="one wide aligned">Apdex</th>
+                    {{#if ../compared}}
+                        <th class="one wide aligned">Diff</th>
+                    {{/if}}
+                {{/if}}
+                {{#each statistics._groupsMetricsHeaders}}
+                    <th class="one wide aligned" title="{{title}}">
+                        {{label}}<br>
+                        {{unit}}
+                    </th>
+                    {{#if ../../compared}}
+                        <th class="one wide aligned">Diff</th>
+                    {{/if}}
+                {{/each}}
+            </tr>
+            </thead>
+            <tbody>
+            {{#each statistics.groups}}
+                <tr>
+                    <td class="three wide name" title="{{name}}">{{name}}</td>
+                    {{#if ../groupsHasApdex}}
+                        <td class="one wide aligned">
+                            {{#if apdex.isNoSamples}}
+                                NS<sub style="font-size: 0.7em">{{apdex.zones.t}}</sub>
+                            {{else}}
+                                {{apdex.value}}<sub style="font-size: 0.7em">{{apdex.zones.t}}</sub>{{#if apdex.isSmallGroup}}*{{/if}}
+                            {{/if}}
+                        </td>
+                        {{#if ../../compared}}
+                            <td class="one wide aligned">
+								<span class="{{#unless apdex.diff}}hidden{{/unless}} {{apdex.diff.properties.className}} opacity" style="opacity: {{apdex.diff.properties.opacity}}">
+                                    {{#if apdex.diffAvailable}}
+                                        <strong>{{apdex.diff.valueFmt}}</strong>
+                                    {{else}}
+                                        n/a
+                                    {{/if}}
+                                </span>
+                            </td>
+                        {{/if}}
+                    {{/if}}
+                    {{#each items}}
+                        <td class="one wide aligned">
+							<a href="{{_historyLink}}" title="Go to metric's history">
+								{{_integer}}<span style="font-size: 0.6em">.{{_fraction}}</span>
+                            </a>
+                        </td>
+                        {{#if ../../../compared}}
+                            <td class="one wide aligned">
+								<span class="{{#unless diff}}hidden{{/unless}} {{_diffProperties.className}} opacity" style="opacity: {{_diffProperties.opacity}}">
+                                    {{#if diffAvailable}}
+                                        <strong>{{_diffInteger}}<span style="font-size: 0.6em">.{{_diffFraction}}</span></strong>
+                                    {{else}}
+                                        n/a
+                                    {{/if}}
+                                </span>
+                            </td>
+                        {{/if}}
+                    {{/each}}
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+	{{/if}}
+	<br>
+	<br>
+{{/each}}

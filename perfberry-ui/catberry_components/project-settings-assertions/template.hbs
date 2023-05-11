@@ -1,0 +1,42 @@
+<h2 class="ui header">Assertions</h2>
+
+<p>
+    Assertions will be automated calculated for posted test logs from tools such as Gatling, Yandex.Tank and Sitespeed via Perfberry CLI.<br>
+    Assertion rules provided with logs in YAML templates via Perfberry CLI has higher priority that stored in project settings (form below will be skiped).
+</p>
+<p>If you provide transactions for builds over Perfberry API you should pass additional <code>put_assertions=true</code> query parameter.</p>
+
+<form class="ui form">
+    <input name="projectId" type="hidden" value="{{project.id}}">
+
+    <div id="assertions">
+        <input name="assertions:array" type="hidden" value="[]">
+        {{#each assertions}}
+            <cat-project-settings-assertion cat-store="ProjectSettingsAssertions" path="assertions.{{@index}}"></cat-project-settings-assertion>
+        {{/each}}
+    </div>
+
+	<div class="ui icon success message">
+		<i class="checkmark icon"></i>
+		<div class="content">
+			<div class="header">
+				Saved
+			</div>
+			<p>Assertions was successful saved.</p>
+		</div>
+	</div>
+	<div class="ui icon error message">
+		<i class="exclamation triangle icon"></i>
+		<div class="content">
+			<div class="header">
+				Error
+			</div>
+			<p>Assertions not saved, try again later.</p>
+		</div>
+	</div>
+
+    <div class="field">
+        <button class="ui primary button">Save rules</button>
+        <button class="ui secondary button" name="add-assertion" type="button">Add rule</button>
+    </div>
+</form>

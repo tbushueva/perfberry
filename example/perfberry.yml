@@ -1,0 +1,20 @@
+version: 1
+
+jobs:
+    - logs:
+            upload:
+                type: phantom
+                project-id: 1
+                dir: example
+                build:
+                    env: LoadTest
+                assertions:
+                    - metric: tt
+                      selector: avg
+                      condition: gte
+                      expected: 140
+                    - metric: erat
+                      selector: sum
+                      condition: lte
+                      expected: 0.5
+                follow-status: true

@@ -1,0 +1,8 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+.ui.horizontal.list:not(.celled) > .item:first-child {
+  margin-left: 0;
+  padding-left: 0;
+}

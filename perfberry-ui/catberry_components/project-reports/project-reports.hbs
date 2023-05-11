@@ -1,0 +1,67 @@
+<div class="ui vertical segment">
+	{{#if compare}}<h2 class="ui header">Select report to compare with #{{compare}}</h2>{{/if}}
+    <form>
+        <div class="ui input">
+            <input autofocus name="query" placeholder="label:foo scm.vcs.reference:master" value="{{query}}" size="64">
+        </div>
+    </form>
+	<table class="ui very basic table" id="reports">
+		<thead>
+		<tr>
+            <th>Status</th>
+			<th>ID</th>
+            <th>Date</th>
+            <th>VCS</th>
+            <th>Label</th>
+			{{#if compare}}<th></th>{{/if}}
+		</tr>
+		</thead>
+		<tbody>
+			{{#each reports}}
+				<tr>
+                    <td class="two wide">
+                        <a class="ui {{#if _statused}}{{#if passed}}green{{else}}red{{/if}}{{/if}} basic label"
+                           href="{{_link}}"
+                        >
+                            {{#if _statused}}
+                            {{#if passed}}Passed{{else}}Failed{{/if}}
+                            {{else}}
+                            Unknown
+                            {{/if}}
+                        </a>
+                    </td>
+					<td class="two wide">
+                        <a href="{{_link}}">
+                            #{{id}}
+                        </a>
+					</td>
+                    <td class="four wide">{{_datetime}}</td>
+					<td>
+						<cat-scm-vcs cat-store="ProjectReports" path="reports.{{@index}}.scm"></cat-scm-vcs>
+					</td>
+                    <td>{{label}}</td>
+					{{#if ../compare}}
+						<td>
+							<a class="ui primary button" href="{{compareLink}}">
+								Compare
+							</a>
+						</td>
+					{{/if}}
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+	<div class="ui center aligned vertical segment">
+		{{#if pagination.showPrev}}
+		<a href="{{pagination.prevLink}}">
+			<i class="ui chevron left icon"></i>Back
+		</a>
+		{{/if}}
+		&nbsp;&nbsp;&nbsp;
+		{{#if pagination.showNext}}
+		<a href="{{pagination.nextLink}}">
+			Next&nbsp;<i class="ui chevron right icon"></i>
+		</a>
+		{{/if}}
+	</div>
+</div>

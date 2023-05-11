@@ -1,0 +1,1491 @@
+---
+
+openapi: 3.0.2
+
+info:
+  title: Perfberry API
+  description: |
+    API for posting and getting your performance test reports.
+
+    **Common notices**
+
+    All passed date time properties must be in UTC.
+  contact:
+    name: 2GIS Test Labs
+    url: https://github.com/tbushueva
+    email: test-labs@2gis.ru
+  version: 1.0.0
+
+
+components:
+  responses:
+    NoContent:
+      description: Successfull empty response
+    NotFound:
+      description: Item not found
+
+  schemas:
+    Search:
+      type: object
+      properties:
+        name:
+          type: string
+        query:
+          type: string
+      required: [ name, query ]
+    HistorySettings:
+      type: object
+      properties:
+        group:
+          type: string
+        metric:
+          $ref: '#/components/schemas/MetricCode'
+        selector:
+          $ref: '#/components/schemas/StatSelector'
+        env:
+          type: string
+        search_name:
+          type: string
+      required: [ metric, selector, env ]
+    HistorySettingsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/HistorySettings'
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        alias:
+          type: string
+        name:
+          type: string
+      required: [ alias, name ]
+    ProjectMeta:
+      type: object
+      properties:
+        envs:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        groups:
+          type: array
+          items:
+            type: string
+      required: [ envs, groups ]
+    ApdexZones:
+      type: object
+      properties:
+        t:
+          type: number
+          format: double
+        f:
+          type: number
+          format: double
+      required: [ t, f ]
+    Apdex:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        metric:
+          $ref: '#/components/schemas/MetricCode'
+        samples:
+          type: integer
+        zones:
+          $ref: '#/components/schemas/ApdexZones'
+      required: [ value, metric, samples, zones ]
+    ApdexRule:
+      type: object
+      properties:
+        search_name:
+          type: string
+        group:
+          type: string
+        metric:
+          $ref: '#/components/schemas/MetricCode'
+        t:
+          type: number
+          format: double
+        f:
+          type: number
+          format: double
+      required: [ metric, t, f ]
+    MetricCode:
+      type: string
+      enum: [ apx, si, ts, tt, err, erat, rt, ct, cot, st, lt, ret, ttfb, ttfp, doml, domi, domc, fvc, lvc, vc95, cs, mem , eg, ig]
+    MetricValue:
+      type: number
+      format: double
+    StatSelector:
+      type: string
+      enum: [ sum, max, p9999, p999, p99, p98, p95, p90, p75, med, min, avg, stdev ]
+    StatisticItems:
+      type: object
+      additionalProperties:
+        type: object
+        additionalProperties:
+          $ref: '#/components/schemas/MetricValue'
+      example:
+        ts:
+          sum: 1000
+        rt:
+          p99: 190
+          p95: 150
+    GlobalStatistics:
+      type: object
+      properties:
+        apdex:
+          $ref: '#/components/schemas/Apdex'
+        items:
+          $ref: '#/components/schemas/StatisticItems'
+      required: [ items ]
+    GroupStatistics:
+      type: object
+      properties:
+        name:
+          type: string
+        apdex:
+          $ref: '#/components/schemas/Apdex'
+        items:
+          $ref: '#/components/schemas/StatisticItems'
+      required: [ name, items ]
+    Statistics:
+      type: object
+      properties:
+        global:
+          $ref: '#/components/schemas/GlobalStatistics'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupStatistics'
+
+    Transaction:
+      type: object
+      properties:
+        group:
+          type: string
+        query:
+          type: string
+        payload:
+          type: string
+        status:
+          type: string
+        datetime:
+          type: string
+          format: date-time
+        code:
+          type: integer
+        error:
+          type: string
+        metrics:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MetricValue'
+      required: [ status, datetime, metrics ]
+      example:
+        query: http://example.org/sample
+        payload: foo=bar
+        status: OK
+        code: 201
+        datetime: '2018-02-02T05:32:00.358'
+        metrics:
+          rt: 150
+    TransactionFilters:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            type: string
+        statuses:
+          type: array
+          items:
+            type: string
+        codes:
+          type: array
+          items:
+            type: integer
+      example:
+        groups: [ Home, Search ]
+        statuses: [ OK, KO ]
+        codes: [ 200, 500 ]
+    TransactionList:
+      type: object
+      properties:
+        filters:
+          $ref: '#/components/schemas/TransactionFilters'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+
+    ConditionCode:
+      type: string
+      enum: [ eq, lt, lte, gt, gte ]
+    AssertionResult:
+      type: object
+      properties:
+        actual:
+          $ref: '#/components/schemas/MetricValue'
+          readOnly: true
+        passed:
+          type: boolean
+          readOnly: true
+      required: [ actual, passed ]
+    Assertion:
+      type: object
+      properties:
+        group:
+          type: string
+          description: you may use metric group name otherwise it apply to global statistics
+        metric:
+          $ref: '#/components/schemas/MetricCode'
+        selector:
+          $ref: '#/components/schemas/StatSelector'
+        condition:
+          $ref: '#/components/schemas/ConditionCode'
+        expected:
+          $ref: '#/components/schemas/MetricValue'
+        result:
+          readOnly: true
+          $ref: '#/components/schemas/AssertionResult'
+      required: [ metric, condition, expected ]
+    AssertionRule:
+      type: object
+      properties:
+        env:
+          type: string
+        search:
+          type: string
+        group:
+          type: string
+          description: you may use metric group name otherwise it apply to global statistics
+        metric:
+          $ref: '#/components/schemas/MetricCode'
+        selector:
+          $ref: '#/components/schemas/StatSelector'
+        condition:
+          $ref: '#/components/schemas/ConditionCode'
+        expected:
+          $ref: '#/components/schemas/MetricValue'
+      required: [ metric, condition, expected ]
+    VcsInfo:
+      type: object
+      properties:
+        reference:
+          type: string
+        revision:
+          type: string
+        title:
+          type: string
+      required: [ reference, revision ]
+    ScmInfo:
+      type: object
+      properties:
+        vcs:
+          $ref: '#/components/schemas/VcsInfo'
+        parameters:
+          type: object
+      required: [ parameters ]
+    Build:
+      type: object
+      properties:
+        env:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        scm:
+          $ref: '#/components/schemas/ScmInfo'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        passed:
+          type: boolean
+          readOnly: true
+      required: [ env ]
+    Link:
+      type: object
+      properties:
+        url:
+          type: string
+        label:
+          type: string
+      required: [ url, label ]
+    Report:
+      type: object
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        label:
+          type: string
+        description:
+          type: string
+        scm:
+          $ref: '#/components/schemas/ScmInfo'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        passed:
+          type: boolean
+          readOnly: true
+      required: [ links ]
+    MetricFilter:
+      type: object
+      properties:
+        envs:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        metrics:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/MetricCode'
+        searches:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Search'
+      required: [ envs, metrics, searches ]
+    HistoryItem:
+      type: object
+      properties:
+        value:
+          readOnly: true
+          $ref: '#/components/schemas/MetricValue'
+        report_id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        expected:
+          readOnly: true
+          $ref: '#/components/schemas/MetricValue'
+      required: [ value, report_id, created_at ]
+    MetricHistory:
+      type: object
+      properties:
+        settings:
+          readOnly: true
+          $ref: '#/components/schemas/HistorySettings'
+        values:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/HistoryItem'
+      required: [ settings, values ]
+    History:
+      type: object
+      properties:
+        filters:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/MetricFilter'
+        history:
+          readOnly: true
+          $ref: '#/components/schemas/MetricHistory'
+      required: [ filters, history ]
+
+
+paths:
+  /healthcheck:
+    get:
+      tags: [ Info ]
+      summary: Returns OK message
+      responses:
+        200:
+          description: A simple OK response
+          content:
+            text/plain:
+              schema:
+                type: string
+  /v1/info:
+    get:
+      tags: [ Info ]
+      summary: Fetch meta info about metrics and selectors
+      responses:
+        200:
+          description: A overall info response
+
+
+  /v1/projects:
+    get:
+      tags: [ Projects ]
+      summary: Fetch all projects
+      responses:
+        200:
+          description: A list of Project items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+  /v1/projects/{project_id}:
+    get:
+      tags: [ Projects ]
+      summary: Fetch project
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A Project item response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        404:
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [ Projects ]
+      summary: Update project
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /v1/projects/{project_id}/meta:
+    get:
+      tags: [ Projects ]
+      summary: Fetch project meta info about envs and groups from builds
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A ProjectMeta item response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectMeta'
+
+  /v1/projects/{project_id}/overview:
+    get:
+      tags: [ Projects ]
+      summary: Fetch project overview
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of Project settings items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistorySettings'
+    put:
+      tags: [ Projects ]
+      summary: Update project overview
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/HistorySettings'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+
+  /v1/projects/{project_id}/searches:
+    get:
+      tags: [ Projects ]
+      summary: Fetch project searches
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of Project search items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Search'
+    put:
+      tags: [ Projects ]
+      summary: Update project searches
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Search'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+
+  /v1/projects/{project_id}/assertions:
+    get:
+      tags: [ Projects ]
+      summary: Fetch project assertions
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of Project assertions items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssertionRule'
+    put:
+      tags: [ Projects ]
+      summary: Update project assertions
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AssertionRule'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+
+  /v1/projects/{project_id}/apdex:
+    get:
+      tags: [ Projects ]
+      summary: Fetch project Apdex rules
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of Apdex rule items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApdexRule'
+    put:
+      tags: [ Projects ]
+      summary: Update project Apdex rules
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ApdexRule'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+
+  /v1/projects/{project_id}/graphs:
+    get:
+      tags: [ Projects ]
+      summary: Fetch project graphs
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of HistorySettingsList items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistorySettingsList'
+    put:
+      tags: [ Projects ]
+      summary: Update project graphs
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/HistorySettingsList'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+
+  /v1/projects/{project_id}/history:
+    get:
+      tags: [ Projects ]
+      summary: Fetch history of statistics accross reports
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: lines
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: |
+            Each line must be in format:
+            `{search_name},{env},{group},{metric},{selector}`
+
+            Optional values (`search_name` and `group`) may be replaced by empty.
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: |
+            As defined by date-time - [RFC3339](http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14)
+
+            Will shown as date-time field in Swagger UI after https://github.com/swagger-api/swagger-ui/issues/3286
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: |
+            As defined by date-time - [RFC3339](http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14)
+
+            Will shown as date-time field in Swagger UI after https://github.com/swagger-api/swagger-ui/issues/3286
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: A list of History items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/History'
+
+
+  /v1/projects/{project_id}/badges/static:
+    get:
+      tags: [ Badges ]
+      summary: Fetch static badge
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A badge
+  /v1/projects/{project_id}/badges/status:
+    get:
+      tags: [ Badges ]
+      summary: Fetch badge with assertions status
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: query
+          in: query
+          schema:
+            type: string
+          description: for filter reports
+      responses:
+        200:
+          description: A badge
+  /v1/projects/{project_id}/badges/stats:
+    get:
+      tags: [ Badges ]
+      summary: Fetch badge with statistic item
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: query
+          in: query
+          schema:
+            type: string
+          description: for filter reports
+        - name: env
+          in: query
+          schema:
+            type: string
+          description: if not provided will be select first build in report
+        - name: group
+          in: query
+          schema:
+            type: string
+        - name: metric
+          in: query
+          schema:
+            type: string
+          description: if not provided will be select first metric in stats
+        - name: selector
+          in: query
+          schema:
+            type: string
+          description: if not provided will be select first selector in statistics
+      responses:
+        200:
+          description: A badge
+
+
+  /v1/projects/{project_id}/reports:
+    get:
+      tags: [ Reports ]
+      summary: Fetch all reports
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: query
+          in: query
+          schema:
+            type: string
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: |
+            As defined by date-time - [RFC3339](http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14)
+
+            Will shown as date-time field in Swagger UI after https://github.com/swagger-api/swagger-ui/issues/3286
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: |
+            As defined by date-time - [RFC3339](http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14)
+
+            Will shown as date-time field in Swagger UI after https://github.com/swagger-api/swagger-ui/issues/3286
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: A list of Report items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+    post:
+      tags: [ Reports ]
+      summary: Create new report
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        201:
+          description: A successfull response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        400:
+          description: A bad request response
+
+  /v1/projects/{project_id}/reports/{report_id}:
+    get:
+      tags: [ Reports ]
+      summary: Fetch report
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A Report item response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        404:
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [ Reports ]
+      summary: Update report
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+        404:
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [ Reports ]
+      summary: Remove report
+      description: Delete report with builds includes statistics, assertions and transactions
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+
+
+  /v1/projects/{project_id}/reports/{report_id}/builds:
+    post:
+      tags: [ Builds ]
+      summary: Create new build
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Build'
+      responses:
+        201:
+          description: A successfull response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Build'
+    get:
+      tags: [ Builds ]
+      summary: Fetch all builds
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of Build item response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Build'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /v1/projects/{project_id}/reports/{report_id}/builds/{build_id}:
+    get:
+      tags: [ Builds ]
+      summary: Fetch build
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: build_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A Build item response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Build'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /v1/projects/{project_id}/reports/{report_id}/builds/{build_id}/statistics:
+    get:
+      tags: [ Builds ]
+      summary: Fetch statistics
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: build_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A Statistics item response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statistics'
+    put:
+      tags: [ Builds ]
+      summary: Save statistics
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: build_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Statistics'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+
+  /v1/projects/{project_id}/reports/{report_id}/builds/{build_id}/assertions:
+    get:
+      tags: [ Builds ]
+      summary: Fetch assertions
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: build_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of Assertion item response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assertion'
+    put:
+      tags: [ Builds ]
+      summary: Save assertions
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: build_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Assertion'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+
+  /v1/projects/{project_id}/reports/{report_id}/builds/{build_id}/transactions:
+    get:
+      tags: [ Builds ]
+      summary: Fetch transactions
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: build_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+        - name: group
+          in: query
+          schema:
+            type: string
+        - name: query
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: code
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A list of Transaction item response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionList'
+
+    put:
+      tags: [ Builds ]
+      summary: Save transactions
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: build_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: put_statistics
+          in: query
+          description: 'Calculate statistics based on transactions metrics and add to build'
+          schema:
+            type: boolean
+        - name: put_apdex
+          in: query
+          description: 'Calculate Apdex based on project rules and add to build statistics'
+          schema:
+            type: boolean
+        - name: put_assertions
+          in: query
+          description: 'Calculate assertions based on statistics and project rules and add to build.'
+          schema:
+            type: boolean
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+
+
+  /v1/projects/{project_id}/logs/browsertime:
+    post:
+      tags: [ Logs ]
+      summary: Create report from browsertime tool logs
+      description: |
+        Supports browsertime version 8.12.0
+
+        Command:
+        `docker run --shm-size=1g --rm -v "$(pwd)":/sitespeed.io sitespeedio/sitespeed.io:12.10.0 --plugins.add=analysisstorer --plugins.remove=html --plugins.remove=screenshot https://perfberry.2gis.ru https://perfberry.2gis.ru/projects/starter-kit`
+
+        `Try it out` will be not correctly rendered unless this issue:
+        https://github.com/swagger-api/swagger-ui/issues/3641
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: report_id
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: raw log
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                report:
+                  type: object
+                  $ref: '#/components/schemas/Report'
+                build:
+                  type: object
+                  $ref: '#/components/schemas/Build'
+                browsertime:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+      responses:
+        201:
+          description: A successfull response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        400:
+          description: A bad request response
+
+  /v1/projects/{project_id}/logs/gatling:
+    post:
+      tags: [ Logs ]
+      summary: Create report from Gatling simulation log
+      description: |
+        Supports Gatling version 2.3.1
+
+        For extended reports you should extend your simulation log with extra
+        info extractor, pass it into http configuration and
+        provide `extended=true` in query params:
+        ```
+        import io.gatling.http.protocol.HttpProtocolBuilder
+        import io.gatling.http.request.ExtraInfo
+        ...
+        /**
+          * Perfberry extra info provides additional filters and information
+          * about requests on Transactions page.
+          *
+          * Order of returning values is matter, you may omit values only from
+          * right side.
+          * Omit `payload` value if you does't want track request's body.
+          * Omit `getUrl` method if you does't want track request's URL.
+          *
+          * For requests without HTTP status code (connection refused etc) you
+          * may pass empty string (by default and Perfberry skips this field)
+          * or zero or another value which you want see.
+          *
+          * Payload works properly with `body` method with passed `StringBody`
+          * and `ELFileBody` values etc.
+          * Does't work with `formParam`.
+          *
+          * Gatling documentation about dumping custom data into `simulation.log`:
+          * https://gatling.io/docs/current/http/http_protocol/#dumping-custom-data
+          */
+        val perfberryExtraInfo: ExtraInfo => List[Any] = e => {
+          val payload = try {
+            (0 until e.request.getCompositeByteData.size()).map { i =>
+              new String(e.request.getCompositeByteData.get(i))
+            }.mkString
+          } catch {
+            case _: Throwable => ""
+          }
+          List(e.response.statusCode.getOrElse(""), e.request.getUrl, payload)
+        }
+        ...
+        val httpConf: HttpProtocolBuilder = http
+          .baseURL("http://example.org")
+          .extraInfoExtractor(perfberryExtraInfo)
+        ```
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: label
+          in: query
+          schema:
+            type: string
+          description: label for report
+        - name: env
+          in: query
+          schema:
+            type: string
+          description: build env name if parser don't provide
+        - name: extended
+          in: query
+          schema:
+            type: boolean
+          description: create extended report, see description
+        - name: links
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: |
+            Each link item must be in format:
+            `{label},{URL}`
+      requestBody:
+        required: true
+        description: raw log
+        content:
+          text/plain; charset=utf-8:
+            schema:
+              type: string
+      responses:
+        201:
+          description: A successfull response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        400:
+          description: A bad request response
+
+  /v1/projects/{project_id}/logs/phantom:
+    post:
+      tags: [ Logs ]
+      summary: Create report from Phantom (Yandex.Tank) log
+      description: Supports Yandex.Tank version 1.12.3
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: label
+          in: query
+          schema:
+            type: string
+          description: label for report
+        - name: env
+          in: query
+          schema:
+            type: string
+          description: build env name if parser don't provide
+        - name: links
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: |
+            Each link item must be in format:
+            `{label},{URL}`
+      requestBody:
+        required: true
+        description: raw log
+        content:
+          text/plain; charset=utf-8:
+            schema:
+              type: string
+      responses:
+        201:
+          description: A successfull response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        400:
+          description: A bad request response
+
+
+  /v1/diffs/builds/{original_id}/{compared_id}/statistics:
+    get:
+      tags: [ Diffs ]
+      summary: Fetch statistics diffs from two builds
+      deprecated: true
+      parameters:
+        - name: original_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: compared_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A Statistics diffs item response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statistics'
+        404:
+          $ref: '#/components/responses/NotFound'

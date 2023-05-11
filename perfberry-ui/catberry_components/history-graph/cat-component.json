@@ -1,0 +1,5 @@
+{
+	"template": "./history-graph.hbs",
+	"errorTemplate": "./error.hbs",
+	"logic": "./HistoryGraph.js"
+}

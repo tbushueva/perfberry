@@ -1,0 +1,31 @@
+# Catberry files
+__BrowserBundle.js
+.appDefinitions.js
+node_modules
+public/*
+!public/bg.jpg
+!public/favicon.ico
+!public/healthcheck.txt
+!public/icon.png
+
+# Semantic UI
+semantic/dist
+
+# OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+*.lnk
+Desktop.ini
+
+# Linux
+*~
+.directory
+
+# IDEA
+.idea

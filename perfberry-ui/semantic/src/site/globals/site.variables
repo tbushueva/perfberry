@@ -1,0 +1,21 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+@fontName          : -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial;
+@importGoogleFonts : false;
+
+@blue              : #0d8ce4;
+@green             : #4ca733;
+@yellow            : #d2d22c;
+@red               : #c3654b;
+
+@linkColor         : @blue;
+
+@borderColor               : rgba(34, 36, 38, 0.1);
+@strongBorderColor         : rgba(34, 36, 38, 0.2);
+
+@subtleShadow      : 0px 1px 3px 0 @borderColor;
+
+@computerBreakpoint: 1200px;
+@largeMonitorBreakpoint: 1400px;

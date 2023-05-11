@@ -1,0 +1,98 @@
+<h2 class="ui header">Public badges</h2>
+
+<h3 class="ui header">Static</h3>
+<table class="ui very basic collapsing celled table">
+	<thead>
+		<tr>
+			<th colspan="2"><img src="{{badges.static}}"/></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="collapsing">Markdown</td>
+			<td>
+				<code>
+					[![reports]({{badges.static}})](https://perfberry.2gis.ru/projects/{{project.alias}})
+				</code>
+			</td>
+		</tr>
+		<tr>
+			<td>HTML</td>
+			<td>
+				<code>
+					<<span>a href="</span>https://perfberry.2gis.ru/projects/{{project.alias}}"><br>
+					&nbsp;&nbsp;<<span>img </span>alt="reports" src="{{badges.static}}"><br>
+					<<span>/a</span>>
+				</code>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3 class="ui header">
+	Status
+	<span class="sub header">
+		Show status of latest report. Will be work with asserts in reports. Otherwise default static badge.
+	</span>
+</h3>
+<table class="ui very basic collapsing celled table">
+	<thead>
+	<tr>
+		<th colspan="2"><img src="{{badges.status}}"/></th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td class="collapsing">Markdown</td>
+		<td>
+			<code>
+				[![report status]({{badges.status}})](https://perfberry.2gis.ru/projects/{{project.alias}})
+			</code>
+		</td>
+	</tr>
+	<tr>
+		<td>HTML</td>
+		<td>
+			<code>
+				<<span>a href="</span>https://perfberry.2gis.ru/projects/{{project.alias}}"><br>
+				&nbsp;&nbsp;<<span>img </span>alt="report status" src="{{badges.status}}"><br>
+				<<span>/a</span>>
+			</code>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+<h3 class="ui header">
+	Statistic
+	<span class="sub header">
+		Show statistic of latest report.
+	</span>
+</h3>
+<table class="ui very basic collapsing celled table">
+	<thead>
+	<tr>
+		<th colspan="2"><img src="{{badges.stats}}"/></th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td class="collapsing">Markdown</td>
+		<td>
+			<code>
+				[![report statistic]({{badges.stats}})](https://perfberry.2gis.ru/projects/{{project.alias}})
+			</code>
+		</td>
+	</tr>
+	<tr>
+		<td>HTML</td>
+		<td>
+			<code>
+				<<span>a href="</span>https://perfberry.2gis.ru/projects/{{project.alias}}"><br>
+				&nbsp;&nbsp;<<span>img </span>alt="report statistic" src="{{badges.stats}}"><br>
+				<<span>/a</span>>
+			</code>
+		</td>
+	</tr>
+	</tbody>
+</table>

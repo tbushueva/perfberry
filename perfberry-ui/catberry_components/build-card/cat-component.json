@@ -1,0 +1,5 @@
+{
+	"template": "./build-card.hbs",
+	"errorTemplate": "./error.hbs",
+	"logic": "./BuildCard.js"
+}

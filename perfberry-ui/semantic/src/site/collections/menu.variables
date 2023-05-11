@@ -1,0 +1,15 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@itemFontWeight: 500;
+@activeItemFontWeight: 500;
+@secondaryPointingActiveFontWeight: 500;
+
+@invertedActiveBackground: @strongTransparentWhite;
+
+@secondaryPointingBorderWidth: 1px;
+@secondaryPointingItemHorizontalPadding: 0;
+@itemTextColor: @linkColor;
+@secondaryPointingHoverTextColor: @hoveredTextColor;
+@secondaryPointingActiveTextColor: @textColor;

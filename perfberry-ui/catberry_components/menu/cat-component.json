@@ -1,0 +1,5 @@
+{
+	"template": "./menu.hbs",
+	"errorTemplate": "./error.hbs",
+	"logic": "./Menu.js"
+}

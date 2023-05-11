@@ -1,0 +1,14 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.ui.secondary.pointing.menu:not(.vertical) .item {
+  margin-left: @relativeLarge;
+  margin-right: @relativeLarge;
+}
+.ui.secondary.pointing.menu:not(.vertical) .item:first-child {
+  margin-left: 0;
+}
+.ui.secondary.pointing.menu:not(.vertical) .item:last-child {
+  margin-right: 0;
+}

@@ -1,0 +1,68 @@
+<h1 class="ui header">Info about metrics and selectors</h1>
+
+<h2 class="ui header">Transaction metrics</h2>
+<table class="ui very basic table">
+	<thead style="background-color: #fff">
+	<tr>
+		<th>Metric</th>
+		<th>Code</th>
+		<th>Description</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{#each metrics}}
+		<tr>
+			<td class="two wide">{{label}}</td>
+			<td class="one wide"><code>{{metric}}</code></td>
+			<td>
+				{{name}}{{#if unit}} in <strongs>{{unit}}</strongs>,{{else}},{{/if}}
+				{{#unless inverted}}
+					more is better
+				{{else}}
+					less is better
+				{{/unless}}
+			</td>
+		</tr>
+	{{/each}}
+	</tbody>
+</table>
+
+<h2 class="ui header">Statistic selectors</h2>
+<table class="ui very basic table">
+	<thead style="background-color: #fff">
+	<tr>
+		<th>Selector</th>
+		<th>Code</th>
+		<th>Description</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{#each selectors}}
+		<tr>
+			<td class="two wide">{{label}}</td>
+			<td class="one wide"><code>{{selector}}</code></td>
+			<td>{{name}} of metric</td>
+		</tr>
+	{{/each}}
+	</tbody>
+</table>
+
+<h2 class="ui header">Assertion conditions</h2>
+<table class="ui very basic table">
+	<thead style="background-color: #fff">
+	<tr>
+		<th>Condition</th>
+		<th>Code</th>
+		<th>Description</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{#each conditions}}
+		<tr>
+			<td class="two wide">{{label}}</td>
+			<td class="one wide"><code>{{condition}}</code></td>
+			<td>{{name}}</td>
+		</tr>
+	{{/each}}
+	</tbody>
+</table>

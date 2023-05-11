@@ -1,0 +1,5 @@
+{
+	"template": "./report-header.hbs",
+	"errorTemplate": "./error.hbs",
+	"logic": "./ReportHeader.js"
+}

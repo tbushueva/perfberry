@@ -1,0 +1,46 @@
+<h2 class="ui header">Project</h2>
+
+<form class="ui form">
+	<div class="fields">
+		<div class="four wide field">
+			<label>ID for API and CLI</label>
+			<input data-value-type="number" name="id" readonly value="{{project.id}}">
+		</div>
+		<div class="four wide field">
+			<label>Name</label>
+			<input name="name" value="{{project.name}}">
+		</div>
+		<div class="eight wide field">
+			<label>Alias</label>
+			<div class="ui labeled input">
+				<div class="ui label">
+					https://perfberry.2gis.ru/projects/
+				</div>
+				<input name="alias" readonly value="{{project.alias}}">
+			</div>
+		</div>
+	</div>
+
+	<div class="ui icon success message">
+		<i class="checkmark icon"></i>
+		<div class="content">
+			<div class="header">
+				Saved
+			</div>
+			<p>Project was successful saved.</p>
+		</div>
+	</div>
+	<div class="ui icon error message">
+		<i class="exclamation triangle icon"></i>
+		<div class="content">
+			<div class="header">
+				Error
+			</div>
+			<p>Project not saved, try again later.</p>
+		</div>
+	</div>
+
+    <div class="field">
+        <button class="ui primary button">Save project</button>
+    </div>
+</form>

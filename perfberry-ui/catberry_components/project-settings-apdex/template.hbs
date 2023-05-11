@@ -1,0 +1,41 @@
+<h2 class="ui header">Apdex</h2>
+
+<p>
+    Apdex will be automated calculated for posted test logs from tools such as Gatling, Yandex.Tank and Sitespeed.<br>
+    If you provides transactions for builds over API you should pass aditional <code>put_apdex=true</code> query parameter.
+</p>
+
+<form class="ui form">
+    <input name="projectId" type="hidden" value="{{project.id}}">
+
+    <div id="apdex">
+        <input name="apdex:array" type="hidden" value="[]">
+        {{#each apdex}}
+            <cat-project-settings-apdex-item cat-store="ProjectSettingsApdex" i="{{@index}}"></cat-project-settings-apdex-item>
+        {{/each}}
+    </div>
+
+	<div class="ui icon success message">
+		<i class="checkmark icon"></i>
+		<div class="content">
+			<div class="header">
+				Saved
+			</div>
+			<p>Apdex was successful saved.</p>
+		</div>
+	</div>
+	<div class="ui icon error message">
+		<i class="exclamation triangle icon"></i>
+		<div class="content">
+			<div class="header">
+				Error
+			</div>
+			<p>Apdex not saved, try again later.</p>
+		</div>
+	</div>
+
+    <div class="field">
+        <button class="ui primary button">Save rules</button>
+        <button class="ui secondary button" name="add-apdex" type="button">Add rule</button>
+    </div>
+</form>

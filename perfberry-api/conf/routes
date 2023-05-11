@@ -1,0 +1,54 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET           /docs/index.html                                                              controllers.Assets.at(path = "/public/docs", file = "index.html")
+GET           /docs/                                                                        controllers.Assets.at(path = "/public/docs", file = "index.html")
+GET           /docs/openapi.yaml                                                            controllers.Assets.at(path = "/public/docs", file = "openapi.yaml")
+GET           /docs/*file                                                                   controllers.Assets.at(path = "/public/lib/swagger-ui", file)
+GET           /docs                                                                         controllers.Default.redirect(to = "/docs/")
+GET           /                                                                             controllers.Default.redirect(to = "/docs/")
+
+GET           /healthcheck                                                                  controllers.Healthcheck.status()
+
+GET           /v1/info                                                                      controllers.Info.info()
+
+GET           /v1/projects                                                                  controllers.Projects.list(alias: Option[String])
+GET           /v1/projects/:projectId                                                       controllers.Projects.item(projectId: Int)
+PUT           /v1/projects/:projectId                                                       controllers.Projects.updateProject(projectId: Int)
+GET           /v1/projects/:projectId/meta                                                  controllers.Projects.meta(projectId: Int)
+GET           /v1/projects/:projectId/searches                                              controllers.Projects.searches(projectId: Int)
+PUT           /v1/projects/:projectId/searches                                              controllers.Projects.updateSearches(projectId: Int)
+GET           /v1/projects/:projectId/assertions                                            controllers.Projects.assertions(projectId: Int)
+PUT           /v1/projects/:projectId/assertions                                            controllers.Projects.updateAssertions(projectId: Int)
+GET           /v1/projects/:projectId/apdex                                                 controllers.Projects.apdex(projectId: Int)
+PUT           /v1/projects/:projectId/apdex                                                 controllers.Projects.updateApdex(projectId: Int)
+GET           /v1/projects/:projectId/overview                                              controllers.Projects.overview(projectId: Int)
+PUT           /v1/projects/:projectId/overview                                              controllers.Projects.updateOverview(projectId: Int)
+GET           /v1/projects/:projectId/graphs                                                controllers.Projects.graphs(projectId: Int)
+PUT           /v1/projects/:projectId/graphs                                                controllers.Projects.updateGraphs(projectId: Int)
+
+GET           /v1/projects/:projectId/badges/stats                                          controllers.Badges.stats(projectId: Int, query: Option[SearchQuery], env: Option[String], group: Option[String], metric: Option[String], selector: Option[String])
+GET           /v1/projects/:projectId/badges/:badgeType                                     controllers.Badges.get(projectId: Int, badgeType, query: Option[SearchQuery])
+
+GET           /v1/projects/:projectId/history                                               controllers.Reports.history(projectId: Int, lines: Seq[String], from: Option[String], to: Option[String], limit: Option[Int], offset: Option[Int])
+GET           /v1/projects/:projectId/reports                                               controllers.Reports.list(projectId: Int, query: Option[SearchQuery], from: Option[String], to: Option[String], limit: Option[Int], offset: Option[Int])
+POST          /v1/projects/:projectId/reports                                               controllers.Reports.createReport(projectId: Int)
+POST          /v2/projects/:projectId/logs/:logType                                         controllers.Logs.parseLogV2(projectId: Int, logType: LogType, extended: Option[Boolean], report_id: Option[Long])
+POST          /v1/projects/:projectId/logs/:logType                                         controllers.Logs.parseLog(projectId: Int, logType: String, label: Option[String], env: Option[String], extended: Option[Boolean], links: Seq[String])
+GET           /v1/projects/:projectId/reports/:reportId                                     controllers.Reports.report(projectId: Int, reportId: Long)
+PATCH         /v1/projects/:projectId/reports/:reportId                                     controllers.Reports.updateReport(projectId: Int, reportId: Long)
+DELETE        /v1/projects/:projectId/reports/:reportId                                     controllers.Reports.remove(projectId: Int, reportId: Long)
+
+GET           /v1/projects/:projectId/reports/:reportId/builds                              controllers.Reports.builds(projectId: Int, reportId: Long)
+POST          /v1/projects/:projectId/reports/:reportId/builds                              controllers.Reports.createBuild(projectId: Int, reportId: Long)
+GET           /v1/projects/:projectId/reports/:reportId/builds/:buildId                     controllers.Reports.build(projectId: Int, reportId: Long, buildId: Long)
+GET           /v1/projects/:projectId/reports/:reportId/builds/:buildId/statistics          controllers.Reports.statistics(projectId: Int, reportId: Long, buildId: Long)
+PUT           /v1/projects/:projectId/reports/:reportId/builds/:buildId/statistics          controllers.Reports.createStatistics(projectId: Int, reportId: Long, buildId: Long)
+GET           /v1/projects/:projectId/reports/:reportId/builds/:buildId/assertions          controllers.Reports.assertions(projectId: Int, reportId: Long, buildId: Long)
+PUT           /v1/projects/:projectId/reports/:reportId/builds/:buildId/assertions          controllers.Reports.createAssertions(projectId: Int, reportId: Long, buildId: Long)
+GET           /v1/projects/:projectId/reports/:reportId/builds/:buildId/transactions        controllers.Reports.transactions(projectId: Int, reportId: Long, buildId: Long, limit: Option[Int], group: Option[String], query: Option[String], status: Option[String], code: Option[Int], sort_metric: Option[String])
+PUT           /v1/projects/:projectId/reports/:reportId/builds/:buildId/transactions        controllers.Reports.createTransactions(projectId: Int, reportId: Long, buildId: Long, put_statistics: Option[Boolean], put_apdex: Option[Boolean], put_assertions: Option[Boolean])
+GET           /v1/projects/:projectId/reports/:reportId/builds/:buildId/graphs              controllers.Reports.graphs(projectId: Int, reportId: Long, buildId: Long, group: Option[String], has_error: Option[Boolean])
+
+GET           /v1/diffs/builds/:originalId/:comparedId/statistics                           controllers.Diffs.buildStatistics(originalId: Long, comparedId: Long)

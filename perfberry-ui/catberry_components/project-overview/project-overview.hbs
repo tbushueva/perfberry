@@ -1,0 +1,43 @@
+<cat-project-graphs cat-store="ProjectGraphs"></cat-project-graphs>
+
+<div class="ui vertical segment">
+	<h2 class="ui header">Latest reports</h2>
+	<table class="ui very basic table" id="reports">
+		<thead>
+		<tr>
+            <th>Status</th>
+			<th>ID</th>
+            <th>Date</th>
+            <th>VCS</th>
+            <th>Label</th>
+		</tr>
+		</thead>
+		<tbody>
+			{{#each builds}}
+				<tr>
+                    <td class="two wide">
+                        <a class="ui {{#if _statused}}{{#if passed}}green{{else}}red{{/if}}{{/if}} basic label"
+                           href="{{_link}}"
+                        >
+                            {{#if _statused}}
+                            {{#if passed}}Passed{{else}}Failed{{/if}}
+                            {{else}}
+                            Unknown
+                            {{/if}}
+                        </a>
+                    </td>
+					<td class="two wide">
+                        <a href="{{_link}}">
+                            #{{id}}
+                        </a>
+					</td>
+                    <td class="four wide">{{_dateTime}}</td>
+                    <td>
+                        <cat-scm-vcs cat-store="ProjectOverview" path="builds.{{@index}}.scm"></cat-scm-vcs>
+					</td>
+                    <td>{{label}}</td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</div>

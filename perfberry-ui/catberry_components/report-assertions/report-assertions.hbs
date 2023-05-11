@@ -1,0 +1,70 @@
+{{#each builds}}
+    <cat-build-card cat-store="Report" path="report.builds.{{@index}}"></cat-build-card>
+
+    <div class="ui vertical segment">
+		{{#if assertions}}
+            <table class="ui very basic sorter table">
+                <thead>
+                <tr style="background-color: #fff;">
+                    <th class="one wide">Status</th>
+                    <th class="one wide right aligned">Actual</th>
+					{{#if comparable}}
+                        <th class="one wide right aligned">Diff</th>
+					{{/if}}
+                    <th class="one wide right aligned">Budget</th>
+					{{#if comparable}}
+                        <th class="one wide right aligned">Diff</th>
+					{{/if}}
+                    <th class="one wide right aligned">Budget, %</th>
+					{{#if comparable}}
+                        <th class="one wide right aligned">Diff</th>
+					{{/if}}
+                    <th>Assertion</th>
+                </tr>
+                </thead>
+                <tbody>
+				{{#each assertions}}
+                    <tr>
+                        <td>
+                        <span class="ui {{#if assertion.result.passed}}green{{else}}red{{/if}} basic label">
+							{{#if assertion.result}}
+								{{#if assertion.result.passed}}Passed{{else}}Failed{{/if}}
+							{{else}}
+                                Unknown
+							{{/if}}
+                        </span>
+                        </td>
+                        <td class="right aligned">
+                            <a href="{{historyLink}}">{{assertion.result.actual}}</a>
+						</td>
+						{{#if ../comparable}}
+                            <td class="right aligned">{{diff.actual}}</td>
+						{{/if}}
+                        <td class="right aligned">{{assertion.result.budget.abs}}</td>
+						{{#if ../comparable}}
+                            <td class="right aligned">{{diff.budget.abs}}</td>
+						{{/if}}
+                        <td class="right aligned">{{assertion.result.budget.rel}}</td>
+						{{#if ../comparable}}
+                            <td class="right aligned">{{diff.budget.rel}}</td>
+						{{/if}}
+                        <td>
+							{{assertion.group}} {{assertion.selector}} {{assertion.metric}} {{assertion.condition}}
+                            {{assertion.expected}}{{#if assertion.spaced}} {{/if}}{{assertion.unit}}
+							{{#if diff.expected}}
+                                ({{diff.expected}})
+							{{/if}}
+                        </td>
+                    </tr>
+				{{/each}}
+                </tbody>
+            </table>
+		{{else}}
+            <div class="ui secondary inverted yellow segment">
+                <i class="lightbulb outline icon"></i>No assertions. You may add rules in project settings.
+            </div>
+		{{/if}}
+    </div>
+	<br>
+	<br>
+{{/each}}

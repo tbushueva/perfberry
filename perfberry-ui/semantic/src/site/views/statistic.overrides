@@ -1,0 +1,16 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.ui.statistic .value .postfix,
+.ui.statistics .statistic .value .postfix {
+	font-size: 0.4em;
+	position: relative;
+	margin-left: -5px;
+}
+
+.ui.statistic .value .postfix .upper,
+.ui.statistics .statistic .value .postfix .upper {
+	position: absolute;
+	bottom: 20%;
+}

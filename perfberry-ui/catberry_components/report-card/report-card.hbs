@@ -1,0 +1,26 @@
+<div class="ui equal width divided grid">
+	<div class="row">
+		<div class="column">
+			<cat-report-header cat-store="Report" path="report"></cat-report-header>
+		</div>
+		{{#if comparedReport}}
+			<div class="column">
+				<cat-report-header cat-store="Report" path="comparedReport"></cat-report-header>
+			</div>
+		{{/if}}
+	</div>
+</div>
+
+<h3 class="ui header">Software configuration management</h3>
+<div class="ui equal width divided grid">
+	<div class="row">
+		<div class="column">
+			<cat-scm cat-store="Report" path="report.scm"></cat-scm>
+		</div>
+		{{#if comparedReport}}
+			<div class="column">
+				<cat-scm cat-store="Report" path="comparedReport.scm"></cat-scm>
+			</div>
+		{{/if}}
+	</div>
+</div>

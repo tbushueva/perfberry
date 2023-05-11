@@ -1,0 +1,11 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@textAlign: left;
+
+@valueTextTransform: none;
+
+@labelTextTransform: none;
+@labelFontWeight: normal;
+@labelColor: @lightTextColor;

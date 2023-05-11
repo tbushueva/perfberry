@@ -1,0 +1,5 @@
+{
+	"template": "./report-assertions.hbs",
+	"errorTemplate": "./error.hbs",
+	"logic": "./ReportAssertions.js"
+}

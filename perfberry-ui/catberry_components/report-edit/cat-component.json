@@ -1,0 +1,5 @@
+{
+	"template": "./report-edit.hbs",
+	"errorTemplate": "./error.hbs",
+	"logic": "./ReportEdit.js"
+}

@@ -1,0 +1,84 @@
+<div class="ui segment">
+    <div class="ui grid">
+        <div class="ten wide column">
+            <h4 class="ui header">
+                <div class="ui inline dropdown" data-name="assertion-group">
+                    <input name="assertions[][group]" type="hidden" value="{{_group.name}}">
+                    <div class="text">{{_group.title}}</div><i class="angle down icon"></i>
+                    <div class="menu">
+                        <div class="ui icon search tiny input">
+                            <i class="search icon"></i>
+                            <input placeholder="Search group...">
+                        </div>
+                        <div class="divider"></div>
+                        {{#each groups}}
+                            <div class="item" data-value="{{name}}">{{title}}</div>
+                        {{/each}}
+                    </div>
+                </div>
+				<div class="ui inline dropdown" data-name="assertion-metric">
+					<input name="assertions[][metric]" type="hidden" value="{{_metric.name}}">
+					<div class="text">{{_metric.title}}</div><i class="angle down icon"></i>
+					<div class="menu">
+						{{#each metrics}}
+							<div class="item" data-value="{{name}}">{{title}}</div>
+						{{/each}}
+					</div>
+				</div>
+                on
+				<div class="ui inline dropdown" data-name="assertion-build">
+					<input name="assertions[][build_name]" type="hidden" value="{{build.name}}">
+					<div class="text">{{build.title}}</div><i class="angle down icon"></i>
+					<div class="menu">
+						{{#each builds}}
+							<div class="item" data-value="{{name}}">{{title}}</div>
+						{{/each}}
+					</div>
+				</div>over
+                <div class="ui inline dropdown" data-name="assertion-search">
+                    <input name="assertions[][search_name]" type="hidden" value="{{search.name}}">
+                    <div class="text">{{search.title}}</div><i class="angle down icon"></i>
+                    <div class="menu">
+                        {{#each searches}}
+                            <div class="item" data-value="{{name}}">{{title}}</div>
+                        {{/each}}
+                    </div>
+                </div>must be
+				<div class="ui inline dropdown" data-name="assertion-condition">
+					<input name="assertions[][condition]" type="hidden" value="{{condition}}">
+					<div class="text">{{_condition.title}}</div><i class="angle down icon"></i>
+					<div class="menu">
+						{{#each conditions}}
+							<div class="item" data-value="{{name}}">{{title}}</div>
+						{{/each}}
+					</div>
+				</div>
+            </h4>
+        </div>
+        <div class="six wide right aligned column">
+            <div class="ui inline dropdown" data-name="assertions-options">
+                <i class="angle down icon"></i>
+                <div class="menu">
+                    <a class="item" href="" name="remove-rule">
+                        Delete rule
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui grid">
+        <div class="six wide column">
+            <div class="two fields">
+                <div class="field">
+                    <label>Expected value</label>
+                    <div class="ui right labeled input">
+                        <input data-name="apdex-t" data-value-type="number" name="assertions[][expected]" placeholder="T" value="{{expected}}">
+                        <div class="ui basic label">{{unit}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>

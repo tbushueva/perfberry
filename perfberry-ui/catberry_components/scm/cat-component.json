@@ -1,0 +1,5 @@
+{
+	"template": "./scm.hbs",
+	"errorTemplate": "./error.hbs",
+	"logic": "./Scm.js"
+}

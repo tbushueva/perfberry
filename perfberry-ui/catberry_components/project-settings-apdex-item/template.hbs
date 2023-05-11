@@ -1,0 +1,97 @@
+<div class="ui segment">
+    <div class="ui grid">
+        <div class="ten wide column">
+            <h4 class="ui header">
+                <div class="ui inline dropdown" data-name="apdex-group">
+                    <input name="apdex[][group]" type="hidden" value="{{_group.name}}">
+                    <div class="text">{{_group.title}}</div><i class="angle down icon"></i>
+                    <div class="menu">
+                        <div class="ui icon search tiny input">
+                            <i class="search icon"></i>
+                            <input placeholder="Search group...">
+                        </div>
+                        <div class="divider"></div>
+                        {{#each groups}}
+                            <div class="item" data-value="{{name}}">{{title}}</div>
+                        {{/each}}
+                    </div>
+                </div>Apdex
+                <input name="apdex[][metric]" type="hidden" value="{{metric}}">
+                by Rtime over
+                <div class="ui inline dropdown" data-name="apdex-search">
+                    <input name="apdex[][search_name]" type="hidden" value="{{search.name}}">
+                    <div class="text">{{search.title}}</div><i class="angle down icon"></i>
+                    <div class="menu">
+                        {{#each searches}}
+                            <div class="item" data-value="{{name}}">{{title}}</div>
+                        {{/each}}
+                    </div>
+                </div>
+            </h4>
+        </div>
+        <div class="six wide right aligned column">
+            <div class="ui inline dropdown" data-name="apdex-options">
+                <i class="angle down icon"></i>
+                <div class="menu">
+                    <a class="item" href="" name="remove-rule">
+                        Delete rule
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui grid">
+        <div class="six wide column">
+            <div class="two fields">
+                <div class="field">
+                    <label>Target threshold</label>
+                    <div class="ui right labeled input">
+                        <input data-name="apdex-t" data-value-type="number" name="apdex[][t]" placeholder="T" value="{{t}}">
+                        <div class="ui basic label">s</div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Frustrated threshold</label>
+                    <div class="ui right labeled input">
+                        <input data-name="apdex-f" data-value-type="number" name="apdex[][f]" placeholder="F (usually 4*T)" value="{{f}}">
+                        <div class="ui basic label">s</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ten wide column">
+            <div class="ui three tiny steps">
+                <div class="step">
+                    <i class="smile green icon"></i>
+                    <div class="content">
+                        <div class="title">Satisfied zone</div>
+                        <div class="description">
+                            0 to <span data-name="apdex-t">{{t}}</span>&nbsp;s
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <i class="meh yellow icon"></i>
+                    <div class="content">
+                        <div class="title">Tolerating zone</div>
+                        <div class="description">
+                            greater than <span data-name="apdex-t">{{t}}</span>&nbsp;s
+                            to <span data-name="apdex-f">{{f}}</span>&nbsp;s
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <i class="frown red icon"></i>
+                    <div class="content">
+                        <div class="title">Frustrated zone</div>
+                        <div class="description">
+                            greater than <span data-name="apdex-f">{{f}}</span>&nbsp;s
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>

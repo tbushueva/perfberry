@@ -1,0 +1,5 @@
+{
+	"template": "./projects.hbs",
+	"errorTemplate": "./error.hbs",
+	"logic": "./Projects.js"
+}

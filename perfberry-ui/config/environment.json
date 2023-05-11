@@ -1,0 +1,11 @@
+{
+	"title": "Perfberry",
+	"server": {
+		"port": 3000
+	},
+	"logger":{
+		"level": 60
+	},
+	"apiEndpoint": "http://api:9000",
+	"dateTimeFormat": "MMM D, YYYY HH:mm"
+}

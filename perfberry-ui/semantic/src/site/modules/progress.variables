@@ -1,0 +1,6 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@barBackground: @disabledTextColor;
+@attachedHeight: 0.1rem;

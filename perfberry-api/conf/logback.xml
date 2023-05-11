@@ -1,0 +1,47 @@
+<configuration>
+
+    <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel"/>
+
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <logLevel>
+                    <fieldName>level</fieldName>
+                </logLevel>
+                <loggerName>
+                    <fieldName>logger</fieldName>
+                </loggerName>
+                <threadName>
+                    <fieldName>thread</fieldName>
+                </threadName>
+                <message/>
+                <stackTrace>
+                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <maxDepthPerThrowable>5</maxDepthPerThrowable>
+                        <maxLength>1024</maxLength>
+                        <shortenedClassNameLength>20</shortenedClassNameLength>
+                        <exclude>sun\.reflect\..*\.invoke.*</exclude>
+                        <exclude>net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+                        <rootCauseFirst>true</rootCauseFirst>
+                    </throwableConverter>
+                </stackTrace>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender name="PLAIN" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%coloredLevel %logger{15} - %message%n%xException{5}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="play" level="${LOGGER_PLAY_LEVEL:-WARN}"/>
+    <logger name="application" level="${LOGGER_APP_LEVEL:-WARN}"/>
+	<logger name="com.zaxxer.hikari" level="${LOGGER_PLAY_LEVEL:-WARN}"/>
+	<logger name="slick.jdbc.JdbcBackend.statement"  level="${LOGGER_PLAY_LEVEL:-WARN}"/>
+
+    <root level="ERROR">
+        <appender-ref ref="${LOGGER_ENCODER:-JSON}"/>
+    </root>
+
+</configuration>

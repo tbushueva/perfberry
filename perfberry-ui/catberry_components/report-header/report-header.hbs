@@ -1,0 +1,27 @@
+<h1 class="ui header">
+    Report #{{id}}
+    {{#if _statused}}
+        <span class="ui {{#if passed}}green{{else}}red{{/if}} basic label">{{#if passed}}Passed{{else}}Failed{{/if}}</span>
+    {{/if}}
+    <div class="sub header">
+        <div class="ui horizontal divided list">
+            <div class="item">
+                {{_datetime}}
+            </div>
+            {{#if label}}
+                <div class="item">
+                    {{label}}
+                </div>
+            {{/if}}
+			{{#each links}}
+				<a class="item" href="{{url}}">
+					{{label}}
+				</a>
+			{{/each}}
+        </div>
+    </div>
+</h1>
+
+{{#if description}}
+	<p style="white-space: pre-line">{{description}}</p>
+{{/if}}

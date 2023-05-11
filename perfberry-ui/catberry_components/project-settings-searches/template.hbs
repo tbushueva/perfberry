@@ -1,0 +1,40 @@
+<h2 class="ui header">Saved searches</h2>
+
+<p>Saved searches may be used for filter reports on graphs, Apdex and assertions.</p>
+
+<form class="ui form">
+    <input name="projectId" type="hidden" value="{{project.id}}">
+
+	<div id="searches">
+        <input name="searches:array" type="hidden" value="[]">
+		{{#if searches}}
+			{{#each searches}}
+				<cat-project-settings-search cat-store="ProjectSettingsSearches" isearch="{{@index}}"></cat-project-settings-search>
+			{{/each}}
+		{{/if}}
+	</div>
+
+	<div class="ui icon success message">
+		<i class="checkmark icon"></i>
+		<div class="content">
+			<div class="header">
+				Saved
+			</div>
+			<p>Searches was successful saved.</p>
+		</div>
+	</div>
+	<div class="ui icon error message">
+		<i class="exclamation triangle icon"></i>
+		<div class="content">
+			<div class="header">
+				Error
+			</div>
+			<p>Searches not saved, try again later.</p>
+		</div>
+	</div>
+
+    <div class="field">
+        <button class="ui primary button">Save searches</button>
+        <button class="ui secondary button" name="add-search" type="button">Add search</button>
+    </div>
+</form>

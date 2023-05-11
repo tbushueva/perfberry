@@ -1,0 +1,43 @@
+{
+	"name": "perfberry",
+	"version": "1.0.0",
+	"description": "Store and visualize your performance results",
+	"main": "./server.js",
+	"browser": {
+		"./config/environment.json": "./config/browser.json"
+	},
+	"dependencies": {
+		"catberry": "9.0.0",
+		"catberry-handlebars": "3.1.0",
+		"catberry-logger": "2.0.0",
+		"catberry-uhr": "5.0.1",
+		"datatables.net": "1.10.19",
+		"datatables.net-dt": "1.10.19",
+		"datatables.net-fixedheader": "3.1.5",
+		"datatables.net-fixedheader-dt": "3.1.5",
+		"errorhandler": "1.5.1",
+		"express": "4.17.1",
+		"fomantic-ui": "2.7.8",
+		"gulp": "4.0.2",
+		"gulp-clean-css": "4.2.0",
+		"gulp-concat": "2.6.1",
+		"highcharts": "6.2.0",
+		"jquery": "3.4.1",
+		"jquery-serializejson": "2.9.0",
+		"moment": "2.24.0",
+		"moment-timezone": "0.5.26",
+		"serve-static": "1.14.1"
+	},
+	"devDependencies": {
+		"gulp-json-editor": "2.5.3",
+		"inquirer": "7.0.0"
+	},
+	"scripts": {
+		"semantic": "cd semantic && gulp build",
+		"static": "npm run semantic && gulp",
+		"postinstall": "npm run static && node ./build.js release",
+		"start": "node ./server.js release",
+		"debug": "npm run static && node ./build.js & node ./server.js",
+		"debug-win": "powershell -Command \"Start-Process -NoNewWindow node ./build.js; Start-Process -NoNewWindow -Wait node ./server.js\""
+	}
+}

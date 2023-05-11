@@ -1,0 +1,31 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.hidden {
+	opacity: 0;
+}
+
+.opacity:hover {
+	opacity: 1 !important;
+}
+
+div.tooltip {
+	position: absolute;
+}
+
+.green {
+	color: @green;
+}
+.olive {
+	color: @olive;
+}
+.yellow {
+	color: @yellow;
+}
+.orange {
+	color: @orange;
+}
+.red {
+	color: @red;
+}
