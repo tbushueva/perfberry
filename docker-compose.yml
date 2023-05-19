@@ -12,20 +12,20 @@ services:
       POSTGRES_PASSWORD: secret
 
   api:
-    image: 2gistestlabs/perfberry-api
+    image: perfberry/perfberry-api
     ports:
       - 9000:9000
     depends_on:
       - postgres
 
   ui:
-    image: 2gistestlabs/perfberry-ui
+    image: perfberry/perfberry-ui
     ports:
       - 3000:3000
     depends_on:
       - api
 
   cli:
-    image: 2gistestlabs/perfberry-cli
+    image: perfberry/perfberry-cli
     volumes:
       - ./example:/example:ro
